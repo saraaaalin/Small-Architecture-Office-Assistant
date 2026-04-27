@@ -1,6 +1,11 @@
 const {useState,useEffect,useRef} = React;
 const A = '#286ea4';
 
+/* PUBLISH: set GitHub URL; add optional standalone sample at assets/downloads/sample-model.3dm */
+const SA_DOWNLOAD_ZIP = 'assets/downloads/structure-assistant-package.zip';
+const SA_SAMPLE_3DM = 'assets/downloads/sample-model.3dm';
+const SA_GITHUB_URL = '#';
+
 function useReveal(){
   useEffect(()=>{
     const els=document.querySelectorAll('.reveal');
@@ -17,9 +22,9 @@ function LogoMark({c=A,sz=22}){
 function GridBg(){
   return <div style={{position:'absolute',inset:0,backgroundImage:'linear-gradient(oklch(0.85 0.02 250/0.2) 1px,transparent 1px),linear-gradient(90deg,oklch(0.85 0.02 250/0.2) 1px,transparent 1px)',backgroundSize:'48px 48px',pointerEvents:'none',zIndex:0}}/>;
 }
-function Btn({href,primary,children,style={}}){
+function Btn({href,primary,children,style={},...rest}){
   const [hov,setHov]=useState(false);
-  return <a href={href||'#'} style={{display:'inline-flex',alignItems:'center',gap:7,padding:'13px 26px',borderRadius:8,fontSize:14,fontWeight:500,textDecoration:'none',letterSpacing:'.01em',transition:'all .2s',background:primary?(hov?`${A}dd`:A):'white',color:primary?'white':(hov?A:'var(--t2)'),border:primary?'none':'1px solid var(--rule)',boxShadow:primary?`0 4px 18px ${A}33`:'var(--shadow-sm)',transform:hov?'translateY(-1px)':'none',...style}} onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}>{children}</a>;
+  return <a href={href||'#'} {...rest} style={{display:'inline-flex',alignItems:'center',gap:7,padding:'13px 26px',borderRadius:8,fontSize:14,fontWeight:500,textDecoration:'none',letterSpacing:'.01em',transition:'all .2s',background:primary?(hov?`${A}dd`:A):'white',color:primary?'white':(hov?A:'var(--t2)'),border:primary?'none':'1px solid var(--rule)',boxShadow:primary?`0 4px 18px ${A}33`:'var(--shadow-sm)',transform:hov?'translateY(-1px)':'none',...style}} onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}>{children}</a>;
 }
 function SectionLabel({n,title,sub,light}){
   const tc=light?'rgba(255,255,255,.45)':'var(--t3)';
@@ -56,7 +61,7 @@ function Nav(){
           <a key={l} href={h} style={{fontSize:13,fontWeight:500,color:'var(--t2)',textDecoration:'none',transition:'color .2s'}}
              onMouseEnter={e=>e.target.style.color=A} onMouseLeave={e=>e.target.style.color='var(--t2)'}>{l}</a>
         ))}
-        <Btn href="#download" primary style={{padding:'7px 16px',fontSize:13}}>Download Plugin</Btn>
+        <Btn href="#download" primary style={{padding:'7px 16px',fontSize:13}}>Download ZIP</Btn>
       </div>
     </nav>
   );
@@ -97,7 +102,7 @@ function Hero(){
           <div className="reveal d4" style={{display:'flex',gap:12,flexWrap:'wrap'}}>
             <Btn href="#download" primary>
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v7M4 6l3 3 3-3M2 11h10" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              Download Plugin
+              Download ZIP
             </Btn>
             <Btn href="#demo">
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke={A} strokeWidth="1.3"/><path d="M5.5 5l4 2-4 2V5Z" stroke={A} strokeWidth="1.2" strokeLinejoin="round"/></svg>
@@ -110,102 +115,89 @@ function Hero(){
             ))}
           </div>
         </div>
-        {/* Hero plugin preview */}
-        <div className="reveal d3">
-          <HeroPluginPreview/>
+        {/* Hero: real Rhino + Structure Assistant screenshot (assets/images/final-interface.png) */}
+        <div className="reveal d3 sa-hero-screenshot-cell">
+          <HeroRhinoScreenshot/>
         </div>
       </div>
     </section>
   );
 }
 
-function HeroPluginPreview(){
+function HeroRhinoScreenshot(){
+  const imgSrc = 'assets/images/final-interface.png';
   return (
-    <div style={{position:'relative'}}>
-      {/* Rhino viewport mockup */}
-      <div style={{background:'oklch(0.17 0.03 250)',borderRadius:14,overflow:'hidden',boxShadow:`0 20px 60px oklch(0.17 0.04 250/0.22)`,border:'1px solid oklch(0.25 0.03 250)'}}>
-        {/* Viewport toolbar */}
-        <div style={{background:'oklch(0.20 0.03 250)',padding:'8px 14px',display:'flex',alignItems:'center',justifyContent:'space-between',borderBottom:'1px solid oklch(0.25 0.03 250)'}}>
-          <div style={{display:'flex',gap:6}}>
-            {['oklch(0.65 0.18 25)','oklch(0.75 0.15 80)','oklch(0.55 0.16 145)'].map((c,i)=><div key={i} style={{width:10,height:10,borderRadius:'50%',background:c}}/>)}
-          </div>
-          <span className="mono" style={{fontSize:10,color:'oklch(0.55 0.03 250)',letterSpacing:'.04em'}}>Rhino 8 · Perspective</span>
-          <div style={{display:'flex',gap:12}}>
-            {['Top','Front','Right','Persp'].map(v=><span key={v} className="mono" style={{fontSize:9,color:'oklch(0.45 0.03 250)'}}>{v}</span>)}
-          </div>
-        </div>
-        {/* 3D viewport */}
-        <div style={{position:'relative',height:200,background:'oklch(0.15 0.02 250)',padding:'10px'}}>
-          <svg width="100%" height="100%" viewBox="0 0 560 180" preserveAspectRatio="xMidYMid meet" fill="none">
-            {/* Grid floor */}
-            {[0,1,2,3,4,5,6].map(i=><line key={i} x1={40+i*80} y1="40" x2={0+i*70} y2="160" stroke="oklch(0.28 0.03 250)" strokeWidth=".5"/>)}
-            {[0,1,2,3].map(i=><line key={i} x1="40" y1={40+i*40} x2="480" y2={40+i*40} stroke="oklch(0.28 0.03 250)" strokeWidth=".5" opacity={1-i*.2}/>)}
-            {/* Structure */}
-            <line x1="120" y1="50" x2="120" y2="145" stroke={A} strokeWidth="2.5" opacity=".8"/>
-            <line x1="280" y1="50" x2="280" y2="145" stroke={A} strokeWidth="2.5" opacity=".8"/>
-            <line x1="440" y1="50" x2="440" y2="145" stroke={A} strokeWidth="2.5" opacity=".8"/>
-            <rect x="115" y="47" width="10" height="5" rx="1" fill={A} opacity=".5"/>
-            <rect x="275" y="47" width="10" height="5" rx="1" fill={A} opacity=".5"/>
-            <rect x="435" y="47" width="10" height="5" rx="1" fill={A} opacity=".5"/>
-            <rect x="115" y="142" width="10" height="5" rx="1" fill={A} opacity=".4"/>
-            <rect x="275" y="142" width="10" height="5" rx="1" fill={A} opacity=".4"/>
-            <rect x="435" y="142" width="10" height="5" rx="1" fill={A} opacity=".4"/>
-            <rect x="116" y="47" width="328" height="7" rx="2" fill={A} opacity=".6"/>
-            <rect x="116" y="98" width="328" height="5" rx="1.5" fill={A} opacity=".3"/>
-            {/* Selected beam highlight */}
-            <rect x="116" y="47" width="164" height="7" rx="2" fill="oklch(0.75 0.15 200)" opacity=".8"/>
-            <circle cx="120" cy="50" r="5" fill="oklch(0.75 0.15 200)" opacity=".9"/>
-            <circle cx="280" cy="50" r="5" fill="oklch(0.75 0.15 200)" opacity=".9"/>
-            {/* Span annotation */}
-            <line x1="120" y1="168" x2="280" y2="168" stroke="oklch(0.75 0.15 200)" strokeWidth=".8" opacity=".6"/>
-            <line x1="120" y1="163" x2="120" y2="173" stroke="oklch(0.75 0.15 200)" strokeWidth="1" opacity=".7"/>
-            <line x1="280" y1="163" x2="280" y2="173" stroke="oklch(0.75 0.15 200)" strokeWidth="1" opacity=".7"/>
-            <text x="200" y="178" textAnchor="middle" fontSize="9" fill="oklch(0.75 0.15 200)" fontFamily="DM Mono,monospace" opacity=".8">8 400 mm · selected</text>
-            {/* Nodes */}
-            {[[120,50],[280,50],[440,50],[120,147],[280,147],[440,147]].map(([x,y],i)=><circle key={i} cx={x} cy={y} r="3.5" fill={A} opacity=".65"/>)}
-          </svg>
-          {/* Layer panel ghost */}
-          <div style={{position:'absolute',top:8,right:8,background:'oklch(0.20 0.03 250/0.9)',border:'1px solid oklch(0.28 0.03 250)',borderRadius:7,padding:'8px 10px',minWidth:130}}>
-            {['Default','Structural_Frame','Walls','Slabs'].map((l,i)=>(
-              <div key={l} style={{display:'flex',alignItems:'center',gap:6,padding:'2px 0'}}>
-                <div style={{width:8,height:8,borderRadius:1,background:i===1?A:'oklch(0.38 0.02 250)',opacity:i===1?1:.5}}/>
-                <span className="mono" style={{fontSize:9,color:i===1?'oklch(0.75 0.10 248)':'oklch(0.45 0.03 250)'}}>{l}</span>
-              </div>
+    <figure className="sa-hero-screenshot" style={{margin:0,width:'100%',maxWidth:680}}>
+      <div
+        className="rhino-panel-chrome sa-hero-screenshot__frame"
+        style={{
+          width:'100%',
+          borderRadius:14,
+          overflow:'hidden',
+          boxShadow:`0 24px 64px oklch(0.17 0.04 250 / 0.2), 0 0 0 1px oklch(0.88 0.02 248)`,
+        }}
+      >
+        <div
+          className="rhino-panel-chrome__titlebar"
+          style={{
+            background:'oklch(0.97 0.008 248)',
+            borderBottom:'1px solid var(--rule)',
+            padding:'10px 14px',
+            display:'flex',
+            alignItems:'center',
+            gap:10,
+            flexWrap:'wrap',
+          }}
+        >
+          <div className="rhino-panel-chrome__dots" aria-hidden="true" style={{display:'flex',gap:6}}>
+            {['oklch(0.65 0.18 25)','oklch(0.75 0.15 80)','oklch(0.55 0.16 145)'].map((c,i)=>(
+              <span key={i} style={{width:10,height:10,borderRadius:'50%',background:c,display:'block'}} />
             ))}
           </div>
+          <span className="mono" style={{fontSize:10,color:'var(--t3)',letterSpacing:'.06em',flex:1,minWidth:0}}>
+            Rhino 8 · Structure Assistant · working session
+          </span>
         </div>
-        {/* Command line */}
-        <div style={{background:'oklch(0.18 0.03 250)',borderTop:'1px solid oklch(0.25 0.03 250)',padding:'6px 14px',display:'flex',alignItems:'center',gap:8}}>
-          <span className="mono" style={{fontSize:10,color:'oklch(0.45 0.03 250)'}}>Command:</span>
-          <span className="mono" style={{fontSize:10,color:'oklch(0.70 0.10 248)'}}>SA_Analyze<span style={{opacity:.5,animation:'blink 1s infinite'}}>_</span></span>
-        </div>
-      </div>
-      {/* Floating plugin panel */}
-      <div style={{position:'absolute',right:-20,bottom:-28,width:240,background:'white',border:`1.5px solid ${A}`,borderRadius:12,boxShadow:`0 8px 36px ${A}22`,overflow:'hidden'}}>
-        <div style={{background:A,padding:'8px 14px',display:'flex',alignItems:'center',gap:7}}>
-          <LogoMark c="rgba(255,255,255,.8)" sz={16}/>
-          <span className="mono" style={{fontSize:10,color:'white',letterSpacing:'.05em'}}>Structure Assistant</span>
-        </div>
-        <div style={{padding:'12px 14px'}}>
-          <div style={{fontSize:11,fontWeight:600,color:'var(--t3)',letterSpacing:'.06em',textTransform:'uppercase',marginBottom:8}}>Guidance ready</div>
-          <div style={{display:'flex',justifyContent:'space-between',padding:'5px 0',borderBottom:'1px solid oklch(0.94 0.01 250)'}}>
-            <span className="mono" style={{fontSize:10,color:'var(--t3)'}}>Span</span>
-            <span className="mono" style={{fontSize:10,color:'var(--text)',fontWeight:500}}>8 400 mm</span>
-          </div>
-          <div style={{display:'flex',justifyContent:'space-between',padding:'5px 0',borderBottom:'1px solid oklch(0.94 0.01 250)'}}>
-            <span className="mono" style={{fontSize:10,color:'var(--t3)'}}>Section</span>
-            <span className="mono" style={{fontSize:10,color:A,fontWeight:600}}>215×495 GL28h</span>
-          </div>
-          <div style={{display:'flex',justifyContent:'space-between',padding:'5px 0'}}>
-            <span className="mono" style={{fontSize:10,color:'var(--t3)'}}>Deflection</span>
-            <span className="mono" style={{fontSize:10,color:'var(--text)'}}>≈ 22 mm</span>
-          </div>
-          <div style={{marginTop:10,padding:'8px 10px',background:`oklch(0.94 0.05 248/.5)`,border:`1px solid oklch(0.80 0.09 248)`,borderRadius:6}}>
-            <p style={{fontSize:10.5,color:'var(--text)',lineHeight:1.55}}>Pre-consultation guidance. Verify with your structural engineer.</p>
-          </div>
+        <div
+          className="sa-hero-screenshot__imgwrap"
+          style={{
+            background:'oklch(0.14 0.03 250)',
+            lineHeight:0,
+            display:'flex',
+            alignItems:'center',
+            justifyContent:'center',
+          }}
+        >
+          <img
+            className="sa-hero-screenshot__img"
+            src={imgSrc}
+            alt="Rhino 8 interface showing the Structure Assistant plugin panel beside structural model viewports"
+            decoding="async"
+            fetchPriority="high"
+            style={{
+              width:'100%',
+              height:'auto',
+              objectFit:'contain',
+              objectPosition:'center top',
+              display:'block',
+            }}
+          />
         </div>
       </div>
-    </div>
+      <figcaption
+        className="mono"
+        style={{
+          marginTop:12,
+          fontSize:10,
+          color:'var(--t3)',
+          letterSpacing:'.04em',
+          textAlign:'center',
+          lineHeight:1.5,
+        }}
+      >
+        Live Rhino 8 session — Structure Assistant docked with model viewports.
+      </figcaption>
+    </figure>
   );
 }
 
@@ -582,17 +574,20 @@ function Download(){
           <div>
             <SectionLabel n="10" title="Plugin installation"/>
             <p className="reveal" style={{fontSize:15,color:'var(--t2)',lineHeight:1.75,marginBottom:28,marginLeft:32}}>
-              Structure Assistant is currently distributed as a Grasshopper definition. Download the <span className="mono" style={{fontSize:13,color:A}}>.gh</span> file, open it in Grasshopper, and keep the definition running while using the Rhino interface.
+              Download a single <span className="mono" style={{fontSize:13,color:A}}>.zip</span> that bundles the Rhino plug-in (<span className="mono" style={{fontSize:12.5,color:A}}>.rhp</span>) for the Structure Assistant panel, the <span className="mono" style={{fontSize:13,color:A}}>StructureAssistant.gh</span> Grasshopper definition, an optional sample Rhino model (<span className="mono" style={{fontSize:12.5,color:A}}>.3dm</span>), and a <span className="mono" style={{fontSize:12.5,color:A}}>README</span> install guide.
             </p>
             <div className="reveal d1" style={{display:'flex',flexDirection:'column',gap:10,marginLeft:32}}>
-              {/* DOWNLOAD: replace href "#" with direct link to your .gh file (e.g. GitHub Releases raw URL) */}
-              <Btn href="#" primary>
+              <Btn href={SA_DOWNLOAD_ZIP} primary download>
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v7M4 6l3 3 3-3M2 11h10" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                Download Structure Assistant (.gh)
+                Download Structure Assistant (ZIP)
               </Btn>
-              <div style={{display:'flex',gap:10,marginTop:4}}>
-                {/* PUBLISH: set href to your public GitHub repository */}
-                <a href="#" style={{display:'flex',alignItems:'center',gap:6,padding:'9px 14px',border:'1px solid var(--rule)',borderRadius:8,background:'white',textDecoration:'none',fontSize:13,color:'var(--t2)',transition:'all .2s',boxShadow:'var(--shadow-sm)'}}
+              <div style={{display:'flex',gap:10,marginTop:4,flexWrap:'wrap',alignItems:'center'}}>
+                <a href={SA_SAMPLE_3DM} download style={{display:'inline-flex',alignItems:'center',gap:6,padding:'9px 14px',border:'1px solid var(--rule)',borderRadius:8,background:'white',textDecoration:'none',fontSize:13,color:'var(--t2)',transition:'all .2s',boxShadow:'var(--shadow-sm)'}}
+                   onMouseEnter={e=>{e.currentTarget.style.borderColor=A;e.currentTarget.style.color=A;}} onMouseLeave={e=>{e.currentTarget.style.borderColor='var(--rule)';e.currentTarget.style.color='var(--t2)';}}>
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v7M4 6l3 3 3-3M2 11h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  Download Sample File
+                </a>
+                <a href={SA_GITHUB_URL} target="_blank" rel="noopener noreferrer" style={{display:'inline-flex',alignItems:'center',gap:6,padding:'9px 14px',border:'1px solid var(--rule)',borderRadius:8,background:'white',textDecoration:'none',fontSize:13,color:'var(--t2)',transition:'all .2s',boxShadow:'var(--shadow-sm)'}}
                    onMouseEnter={e=>{e.currentTarget.style.borderColor=A;e.currentTarget.style.color=A;}} onMouseLeave={e=>{e.currentTarget.style.borderColor='var(--rule)';e.currentTarget.style.color='var(--t2)';}}>
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1C3.69 1 1 3.69 1 7c0 2.65 1.72 4.9 4.1 5.69.3.06.41-.13.41-.28v-1c-1.67.36-2.02-.8-2.02-.8-.27-.7-.67-.88-.67-.88-.55-.37.04-.36.04-.36.6.04.92.62.92.62.54.92 1.41.65 1.75.5.05-.39.21-.65.38-.8-1.33-.15-2.73-.67-2.73-2.96 0-.65.23-1.19.62-1.6-.06-.15-.27-.76.06-1.58 0 0 .5-.16 1.65.62A5.76 5.76 0 017 3.8c.51 0 1.02.07 1.5.2 1.14-.78 1.64-.62 1.64-.62.33.82.12 1.43.06 1.58.39.41.62.95.62 1.6 0 2.3-1.4 2.8-2.74 2.95.22.19.41.56.41 1.12v1.66c0 .16.1.34.41.28A6.002 6.002 0 0013 7c0-3.31-2.69-6-6-6z" fill="currentColor" stroke="none"/></svg>
                   View on GitHub
@@ -604,46 +599,59 @@ function Download(){
           <div className="reveal d2">
             <div style={{background:'white',border:'1px solid var(--rule)',borderRadius:14,padding:'28px 26px',boxShadow:'var(--shadow-sm)'}}>
               <div className="mono" style={{fontSize:11,fontWeight:700,letterSpacing:'.08em',textTransform:'uppercase',color:'var(--t3)',marginBottom:20}}>Getting started</div>
-              {[
-                {
-                  n:'1',
-                  title:'Download the tool package',
-                  code:'Download Structure Assistant.gh\nOptional: download the sample Rhino file'
-                },
-                {
-                  n:'2',
-                  title:'Open Rhino + Grasshopper',
-                  code:'Open Rhino 7 or 8\nLaunch Grasshopper\nFile → Open → Structure Assistant.gh'
-                },
-                {
-                  n:'3',
-                  title:'Keep the definition running',
-                  code:'Do not close Grasshopper\nSelect slab geometry in Rhino\nReview outputs in the panel / definition'
-                },
-              ].map((step,i)=>(
-                <div key={i} style={{display:'flex',gap:14,marginBottom:i<2?20:0,paddingBottom:i<2?20:0,borderBottom:i<2?'1px solid var(--rule)':'none'}}>
-                  <div style={{width:24,height:24,borderRadius:6,background:A,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
-                    <span className="mono" style={{fontSize:11,fontWeight:700,color:'white'}}>{step.n}</span>
-                  </div>
-                  <div>
-                    <div style={{fontWeight:600,fontSize:13.5,marginBottom:8,letterSpacing:'-.01em'}}>{step.title}</div>
-                    <div style={{background:'var(--bg2)',border:'1px solid var(--rule)',borderRadius:7,padding:'10px 12px'}}>
-                      <pre style={{fontFamily:'DM Mono,monospace',fontSize:11,color:A,lineHeight:1.7,margin:0,whiteSpace:'pre'}}>{step.code}</pre>
+              {(() => {
+                const steps = [
+                  {
+                    n:'1',
+                    title:'Install the Rhino plug-in first',
+                    code:'Extract the ZIP and follow README.\nInstall the Structure Assistant .rhp (drag into Rhino or copy to the Rhino plug-ins folder).\nRestart Rhino if prompted — this loads the custom Structure Assistant side panel.',
+                  },
+                  {
+                    n:'2',
+                    title:'Open the Grasshopper file',
+                    code:'Launch Rhino 7 or 8, then Grasshopper.\nFile → Open → StructureAssistant.gh',
+                  },
+                  {
+                    n:'3',
+                    title:'Keep Grasshopper running',
+                    code:'The Rhino panel communicates with the Grasshopper definition.\nLeave Grasshopper open while you work.',
+                  },
+                  {
+                    n:'4',
+                    title:'Use the Rhino panel',
+                    code:'Pick slab geometry in Rhino, set materials in the panel, and read layout, spacing, depth, and analysis feedback there.',
+                  },
+                ];
+                return steps.map((step,i)=>(
+                  <div key={i} style={{display:'flex',gap:14,marginBottom:i<steps.length-1?20:0,paddingBottom:i<steps.length-1?20:0,borderBottom:i<steps.length-1?'1px solid var(--rule)':'none'}}>
+                    <div style={{width:24,height:24,borderRadius:6,background:A,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+                      <span className="mono" style={{fontSize:11,fontWeight:700,color:'white'}}>{step.n}</span>
+                    </div>
+                    <div>
+                      <div style={{fontWeight:600,fontSize:13.5,marginBottom:8,letterSpacing:'-.01em'}}>{step.title}</div>
+                      <div style={{background:'var(--bg2)',border:'1px solid var(--rule)',borderRadius:7,padding:'10px 12px'}}>
+                        <pre style={{fontFamily:'DM Mono,monospace',fontSize:11,color:A,lineHeight:1.7,margin:0,whiteSpace:'pre-wrap'}}>{step.code}</pre>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ));
+              })()}
               {/* Requirements */}
               <div style={{marginTop:20,padding:'12px 14px',background:`oklch(0.94 0.05 248/.4)`,border:`1px solid oklch(0.80 0.09 248)`,borderRadius:8}}>
                 <div className="mono" style={{fontSize:10,color:A,fontWeight:700,letterSpacing:'.06em',marginBottom:6}}>REQUIRES</div>
                 <div style={{display:'flex',gap:14,flexWrap:'wrap',marginBottom:10}}>
-                  {['Rhino 7 or 8','Grasshopper','Windows or macOS','Structure Assistant.gh file'].map(r=>(
+                  {[
+                    'Rhino 7 or 8',
+                    'Grasshopper',
+                    'ZIP: .rhp + StructureAssistant.gh + README (± sample .3dm)',
+                    'Windows recommended (compiled plug-in prototype)',
+                  ].map(r=>(
                     <span key={r} className="mono" style={{fontSize:11,color:'var(--t2)'}}>{r}</span>
                   ))}
                 </div>
                 <div style={{paddingTop:10,borderTop:'1px solid oklch(0.80 0.09 248/.5)'}}>
                   <p style={{fontSize:11.5,color:'var(--t3)',lineHeight:1.65,fontStyle:'italic'}}>
-                    Note: This research prototype is a Grasshopper tool, not a one-click Yak plugin yet. A compiled <span className="mono" style={{fontSize:10.5}}>.gha</span> / <span className="mono" style={{fontSize:10.5}}>.yak</span> release may be added in a future version.
+                    Use the README inside the ZIP for exact file names, load paths, and troubleshooting. The Grasshopper graph powers the analysis; the plug-in hosts the docked UI that talks to it.
                   </p>
                 </div>
               </div>

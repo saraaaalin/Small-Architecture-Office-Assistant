@@ -269,6 +269,37 @@ input[type="range"]::-webkit-slider-thumb {
   }
 }
 
+/* Structure Assistant hero: real Rhino screenshot */
+.sa-hero-screenshot-cell {
+  justify-self: end;
+  width: 100%;
+  max-width: 680px;
+}
+@media (max-width: 1024px) {
+  .sa-hero-screenshot-cell {
+    justify-self: center;
+    max-width: min(100%, 560px);
+  }
+}
+
+.sa-hero-screenshot__frame {
+  border-radius: 14px;
+}
+
+.sa-hero-screenshot__imgwrap {
+  overflow: hidden;
+  max-height: min(78vh, 580px);
+}
+@media (max-width: 640px) {
+  .sa-hero-screenshot__imgwrap {
+    max-height: min(70vh, 420px);
+  }
+}
+
+.sa-hero-screenshot__img {
+  image-rendering: auto;
+}
+
 .sa-workflow-cols {
   align-items: stretch;
 }
