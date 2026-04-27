@@ -494,35 +494,73 @@ function Credibility(){
   );
 }
 
-/* ─── Target users ─── */
-function TargetUsers(){
-  const users = [
-    {title:'Architects at small firms',sub:'2–10 person offices',desc:'The primary audience. Working without in-house structural expertise, relying on a single external SE across multiple projects. The tool supports better preparation for those consultations — so each meeting is more focused and productive.',match:'High'},
-    {title:'Sole practitioners',sub:'Single-architect practice',desc:'Highly dependent on external consultants for structural input. Structure Assistant helps sole practitioners develop designs with more structural awareness — so questions are better formed before they reach the SE.',match:'High'},
-    {title:'Architecture students',sub:'Advanced studio / thesis work',desc:'Working through structural implications of a design proposal before faculty or engineer review. Useful for building structural intuition alongside design development.',match:'High'},
-    {title:'Design-build teams',sub:'Architect-led construction',desc:'When the architect is also managing construction, faster structural feedback during design reduces the risk of costly field changes later in the process.',match:'Medium'},
-  ];
-  const matchC = {High:{col:`oklch(0.35 0.12 145)`,bg:`oklch(0.93 0.07 145/.5)`,bd:`oklch(0.78 0.10 145)`},Medium:{col:`oklch(0.45 0.12 55)`,bg:`oklch(0.93 0.07 60/.4)`,bd:`oklch(0.78 0.10 55)`}};
+/* ─── System pipeline (Grasshopper backend) ─── */
+function PipelineDiagram(){
+  const row = (t) => <div key={t} className="sa-pipeline-li">{t}</div>;
   return (
-    <section id="users" style={{padding:'88px 5vw',borderTop:'1px solid var(--rule)'}}>
+    <div className="sa-pipeline-diagram">
+      <div className="sa-pipeline-step-h">Step 1 — Structural logic generation</div>
+      {['1.1 Detect slab span directions / length','1.2 Separate primary & secondary logic','1.3 Generate primary beam rows','1.4 Generate secondary beam rows'].map(row)}
+      <div className="sa-pipeline-arrow">↓</div>
+      <div className="sa-pipeline-step-h">Step 2 — Analysis & decision logic</div>
+      <div className="sa-pipeline-subgrid">
+        {['2A Beam depth sizing','2B Matching the pre-fab product','2C Budget estimator'].map(x=>(
+          <div key={x} className="sa-pipeline-subcard mono" style={{fontSize:10.5,letterSpacing:'.02em'}}>{x}</div>
+        ))}
+      </div>
+      <div className="sa-pipeline-arrow">↓</div>
+      <div className="sa-pipeline-step-h">Step 3 — Output & feedback</div>
+      <div className="sa-pipeline-out-grid">
+        {['3A 3D beam solids','3B Color coding','3C Karamba heatmap','3D Karamba results'].map(x=>(
+          <div key={x} className="sa-pipeline-subcard mono" style={{fontSize:10.5,letterSpacing:'.02em'}}>{x}</div>
+        ))}
+      </div>
+      <div className="sa-pipeline-arrow">↓</div>
+      <div className="sa-pipeline-ui-box">
+        <div className="mono" style={{fontSize:10,fontWeight:700,letterSpacing:'.09em',color:A,marginBottom:6}}>UI visualization</div>
+        <div style={{fontSize:14,fontWeight:600,color:'var(--text)',letterSpacing:'-.01em',marginBottom:4}}>UI Visualization</div>
+        <div style={{fontSize:12.5,color:'var(--t2)',lineHeight:1.55}}>Real-time results on interface</div>
+      </div>
+    </div>
+  );
+}
+
+function SystemPipeline(){
+  const features = [
+    ['End-to-end pipeline','From geometry input to real-time structural feedback.'],
+    ['Real-time feedback','Instant updates'],
+    ['Rule-based logic','Parametric & accurate'],
+    ['Cost & performance','Informed decisions'],
+    ['Design with confidence','Built-in intelligence'],
+  ];
+  return (
+    <section id="pipeline" style={{padding:'88px 5vw',borderTop:'1px solid var(--rule)',background:'var(--bg2)'}}>
       <div style={{maxWidth:1100,margin:'0 auto'}}>
-        <SectionLabel n="08" title="Who this is for" sub="Structure Assistant supports architects who work alongside structural consultants — bridging the gap between design intent and consultant collaboration."/>
-        <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:18,marginTop:44}}>
-          {users.map((u,i)=>(
-            <div key={i} className={`reveal d${i%2+1}`} style={{background:'white',border:'1px solid var(--rule)',borderRadius:14,padding:'26px 24px',boxShadow:'var(--shadow-sm)',display:'flex',gap:18,alignItems:'flex-start'}}>
-              <div style={{width:44,height:44,borderRadius:10,background:`oklch(0.94 0.05 248/.5)`,border:`1px solid oklch(0.80 0.09 248)`,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
-                <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="8" r="3.5" stroke={A} strokeWidth="1.4"/><path d="M4.5 19c0-3.59 2.91-6.5 6.5-6.5s6.5 2.91 6.5 6.5" stroke={A} strokeWidth="1.4" strokeLinecap="round"/></svg>
-              </div>
-              <div style={{flex:1}}>
-                <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:4}}>
-                  <div>
-                    <div style={{fontWeight:600,fontSize:15,letterSpacing:'-.01em',marginBottom:2}}>{u.title}</div>
-                    <div className="mono" style={{fontSize:10.5,color:'var(--t3)',letterSpacing:'.04em'}}>{u.sub}</div>
-                  </div>
-                  <span style={{fontSize:10,fontWeight:600,padding:'2px 8px',borderRadius:20,background:matchC[u.match].bg,border:`1px solid ${matchC[u.match].bd}`,color:matchC[u.match].col,letterSpacing:'.04em',flexShrink:0,marginLeft:10}}>Match: {u.match}</span>
-                </div>
-                <p style={{fontSize:13,color:'var(--t2)',lineHeight:1.65,marginTop:10}}>{u.desc}</p>
-              </div>
+        <SectionLabel
+          n="08"
+          title="System Pipeline: Grasshopper Backend Design Logic"
+          sub="How slab geometry flows through parametric rules, analysis branches, structural outputs, and the docked Rhino UI — aligned with the capstone presentation slide."
+        />
+        <div className="sa-pipeline-grid reveal" style={{marginTop:40}}>
+          <div className="reveal d1">
+            <PipelineDiagram/>
+          </div>
+          <div className="reveal d2">
+            <div className="mono" style={{fontSize:10,fontWeight:700,letterSpacing:'.08em',textTransform:'uppercase',color:'var(--t3)',marginBottom:10}}>
+              Actual Grasshopper Script Recording
+            </div>
+            <div className="sa-pipeline-video-card">
+              <video controls poster="assets/grasshopper-video-poster.png">
+                <source src="assets/grasshopper-script-recording.mp4" type="video/mp4" />
+              </video>
+            </div>
+          </div>
+        </div>
+        <div className="sa-pipeline-feature-bar reveal d3">
+          {features.map(([title,body])=>(
+            <div key={title} className="sa-pipeline-feature-bar__item">
+              <strong>{title}</strong>
+              <span>{body}</span>
             </div>
           ))}
         </div>
@@ -716,7 +754,7 @@ function App(){
     <Demo/>
     <Features/>
     <Credibility/>
-    <TargetUsers/>
+    <SystemPipeline/>
     <Ecosystem/>
     <Download/>
     <Footer/>
