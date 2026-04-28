@@ -72,7 +72,7 @@ function Hero(){
   return (
     <section style={{position:'relative',minHeight:'96vh',display:'flex',alignItems:'center',padding:'80px 5vw',paddingTop:'calc(80px + 58px)',overflow:'hidden'}}>
       <GridBg/>
-      <div className="sa-hero-two-col" style={{position:'relative',zIndex:1,display:'grid',gridTemplateColumns:'1fr 1fr',gap:56,alignItems:'center',maxWidth:1200,width:'100%',margin:'0 auto'}}>
+      <div className="sa-hero-two-col" style={{position:'relative',zIndex:1,display:'grid',gridTemplateColumns:'1fr 1.5fr',gap:56,alignItems:'center',maxWidth:1400,width:'100%',margin:'0 auto'}}>
         <div>
           <div className="reveal" style={{display:'flex',alignItems:'center',gap:8,marginBottom:24}}>
             <a href="index.html" className="mono" style={{fontSize:11,color:'var(--t3)',textDecoration:'none',letterSpacing:'.05em',transition:'color .2s'}}
@@ -127,7 +127,7 @@ function Hero(){
 function HeroRhinoScreenshot(){
   const imgSrc = 'assets/images/final-interface.png';
   return (
-    <figure className="sa-hero-screenshot" style={{margin:0,width:'100%',maxWidth:680}}>
+    <figure className="sa-hero-screenshot" style={{margin:0,width:'100%',maxWidth:1020}}>
       <div
         className="rhino-panel-chrome sa-hero-screenshot__frame"
         style={{

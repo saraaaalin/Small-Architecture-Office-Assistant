@@ -259,12 +259,12 @@ input[type="range"]::-webkit-slider-thumb {
 .sa-hero-screenshot-cell {
   justify-self: end;
   width: 100%;
-  max-width: 680px;
+  max-width: 1020px;
 }
 @media (max-width: 1024px) {
   .sa-hero-screenshot-cell {
     justify-self: center;
-    max-width: min(100%, 560px);
+    max-width: min(100%, 840px);
   }
 }
 
