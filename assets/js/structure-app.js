@@ -125,7 +125,7 @@ function Hero(){
 }
 
 function HeroRhinoScreenshot(){
-  const imgSrc = '../Full Interface.gif';
+  const imgSrc = 'Full Interface.gif';
   return (
     <figure className="sa-hero-screenshot" style={{margin:0,width:'100%',maxWidth:1020}}>
       <div
