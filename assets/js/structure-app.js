@@ -426,40 +426,6 @@ function Demo(){
   );
 }
 
-/* ─── Features ─── */
-function Features(){
-  const caps = [
-    {title:'Span & member sizing support',desc:'Early-stage guidance on beam depth, width, and section grade across timber, steel, and concrete — to support design decisions before SE review.',tag:'Full'},
-    {title:'Load classification',desc:'Residential, commercial, and roof load categories with appropriate guidance for each.',tag:'Full'},
-    {title:'Material comparison',desc:'Side-by-side section options across glulam, structural steel, and reinforced concrete.',tag:'Full'},
-    {title:'Column sizing support',desc:'Axial load estimation and section guidance for timber and steel columns — to support layout and structural system decisions in early design phases.',tag:'Full'},
-    {title:'Deflection estimates',desc:'Mid-span deflection estimates for serviceability checks — clearly presented with L/300 reference.',tag:'Full'},
-    {title:'Floor system comparison',desc:'Guidance on beam-and-slab, flat slab, and timber joist systems for given spans and loads.',tag:'Full'},
-    {title:'Cantilever guidance',desc:'Basic cantilever span guidance for spans up to 4m, with deflection and vibration notes.',tag:'Partial'},
-    {title:'Roof structure',desc:'Pitched and flat roof member guidance including wind uplift and snow load notes.',tag:'Partial'},
-    {title:'Consultation-ready framing',desc:'All output is labelled as pre-consultation support and structured to help architects collaborate more effectively with their structural engineer.',tag:'Full'},
-  ];
-  const tagColors = {Full:{bg:`oklch(0.93 0.07 145/.6)`,bd:`oklch(0.78 0.10 145)`,col:`oklch(0.30 0.12 145)`},Partial:{bg:`oklch(0.93 0.07 60/.5)`,bd:`oklch(0.78 0.10 55)`,col:`oklch(0.40 0.12 55)`}};
-  return (
-    <section id="features" style={{padding:'88px 5vw',background:'var(--bg2)',borderTop:'1px solid var(--rule)'}}>
-      <div style={{maxWidth:1100,margin:'0 auto'}}>
-        <SectionLabel n="06" title="Key capabilities" sub="What Structure Assistant supports in version 1.0. All guidance is designed to inform design decisions — final structural validation belongs to your engineer."/>
-        <div className="sa-features-grid" style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:14,marginTop:44}}>
-          {caps.map((c,i)=>(
-            <div key={i} className={`reveal d${Math.min(i%3+1,3)}`} style={{background:'white',border:'1px solid var(--rule)',borderRadius:12,padding:'22px 20px',boxShadow:'var(--shadow-sm)'}}>
-              <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:10}}>
-                <h3 style={{fontSize:14,fontWeight:600,letterSpacing:'-.01em',lineHeight:1.3,maxWidth:'70%'}}>{c.title}</h3>
-                <span style={{fontSize:10,fontWeight:600,padding:'2px 8px',borderRadius:20,background:tagColors[c.tag].bg,border:`1px solid ${tagColors[c.tag].bd}`,color:tagColors[c.tag].col,letterSpacing:'.04em',flexShrink:0}}>{c.tag}</span>
-              </div>
-              <p style={{fontSize:12.5,color:'var(--t2)',lineHeight:1.65}}>{c.desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 /* ─── Credibility ─── */
 function Credibility(){
   const pillars = [
@@ -470,7 +436,7 @@ function Credibility(){
   return (
     <section id="credibility" style={{padding:'88px 5vw',background:'var(--dark)',borderTop:'none'}}>
       <div style={{maxWidth:1100,margin:'0 auto'}}>
-        <SectionLabel n="07" title="How it's built" light sub="The quality of the guidance matters. These are the foundations it rests on."/>
+        <SectionLabel n="06" title="How it's built" light sub="The quality of the guidance matters. These are the foundations it rests on."/>
         <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:18,marginTop:44}}>
           {pillars.map((p,i)=>(
             <div key={i} className={`reveal d${i+1}`} style={{background:'rgba(255,255,255,.055)',border:'1px solid rgba(255,255,255,.10)',borderRadius:14,padding:'28px 24px'}}>
@@ -495,37 +461,44 @@ function Credibility(){
 }
 
 /* ─── System pipeline (Grasshopper backend) ─── */
-function PipelineDiagram(){
-  const row = (t) => <div key={t} className="sa-pipeline-li">{t}</div>;
-  return (
-    <div className="sa-pipeline-diagram">
-      <div className="sa-pipeline-step-h">Step 1 — Structural logic generation</div>
-      {['1.1 Detect slab span directions / length','1.2 Separate primary & secondary logic','1.3 Generate primary beam rows','1.4 Generate secondary beam rows'].map(row)}
-      <div className="sa-pipeline-arrow">↓</div>
-      <div className="sa-pipeline-step-h">Step 2 — Analysis & decision logic</div>
-      <div className="sa-pipeline-subgrid">
-        {['2A Beam depth sizing','2B Matching the pre-fab product','2C Budget estimator'].map(x=>(
-          <div key={x} className="sa-pipeline-subcard mono" style={{fontSize:10.5,letterSpacing:'.02em'}}>{x}</div>
-        ))}
-      </div>
-      <div className="sa-pipeline-arrow">↓</div>
-      <div className="sa-pipeline-step-h">Step 3 — Output & feedback</div>
-      <div className="sa-pipeline-out-grid">
-        {['3A 3D beam solids','3B Color coding','3C Karamba heatmap','3D Karamba results'].map(x=>(
-          <div key={x} className="sa-pipeline-subcard mono" style={{fontSize:10.5,letterSpacing:'.02em'}}>{x}</div>
-        ))}
-      </div>
-      <div className="sa-pipeline-arrow">↓</div>
-      <div className="sa-pipeline-ui-box">
-        <div className="mono" style={{fontSize:10,fontWeight:700,letterSpacing:'.09em',color:A,marginBottom:6}}>UI visualization</div>
-        <div style={{fontSize:14,fontWeight:600,color:'var(--text)',letterSpacing:'-.01em',marginBottom:4}}>UI Visualization</div>
-        <div style={{fontSize:12.5,color:'var(--t2)',lineHeight:1.55}}>Real-time results on interface</div>
-      </div>
-    </div>
-  );
-}
-
 function SystemPipeline(){
+  const card = {
+    background:'white',
+    border:'1px solid var(--rule)',
+    borderRadius:14,
+    padding:'28px 24px',
+    boxShadow:'var(--shadow-sm)',
+    display:'flex',
+    flexDirection:'column',
+    gap:0,
+    minHeight:0,
+  };
+  const steps = [
+    {
+      n:'01',
+      label:'Step 1',
+      title:'Structural logic generation',
+      lines:['1.1 Detect slab span directions / length','1.2 Separate primary & secondary logic','1.3 Generate primary beam rows','1.4 Generate secondary beam rows'],
+      mono:'Slab spans → primary / secondary beam grids',
+      icon:<IcoSelect/>,
+    },
+    {
+      n:'02',
+      label:'Step 2',
+      title:'Analysis & decision logic',
+      lines:['2A Beam depth sizing','2B Matching the pre-fab product','2C Budget estimator'],
+      mono:'Sizing · catalog match · cost estimate',
+      icon:<IcoAnalyze/>,
+    },
+    {
+      n:'03',
+      label:'Step 3',
+      title:'Output & feedback',
+      lines:['3A 3D beam solids','3B Color coding','3C Karamba heatmap','3D Karamba results'],
+      mono:'Solids, graphics, and structural readouts',
+      icon:<IcoOutput/>,
+    },
+  ];
   const features = [
     ['End-to-end pipeline','From geometry input to real-time structural feedback.'],
     ['Real-time feedback','Instant updates'],
@@ -537,26 +510,62 @@ function SystemPipeline(){
     <section id="pipeline" style={{padding:'88px 5vw',borderTop:'1px solid var(--rule)',background:'var(--bg2)'}}>
       <div style={{maxWidth:1100,margin:'0 auto'}}>
         <SectionLabel
-          n="08"
+          n="07"
           title="System Pipeline: Grasshopper Backend Design Logic"
           sub="How slab geometry flows through parametric rules, analysis branches, structural outputs, and the docked Rhino UI — aligned with the capstone presentation slide."
         />
-        <div className="sa-pipeline-grid reveal" style={{marginTop:40}}>
-          <div className="reveal d1">
-            <PipelineDiagram/>
+        <div className="sa-pipeline-steps-grid reveal" style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:18,marginTop:44}}>
+          {steps.map((s,i)=>(
+            <div key={s.n} className={`reveal d${i+1}`} style={{...card}}>
+              <div style={{display:'flex',alignItems:'center',gap:14,marginBottom:20}}>
+                <div style={{width:42,height:42,borderRadius:10,background:`oklch(0.94 0.05 248/.5)`,border:`1px solid oklch(0.80 0.09 248)`,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,color:A}}>
+                  {s.icon}
+                </div>
+                <span className="mono" style={{fontSize:11,color:'var(--t3)',letterSpacing:'.07em'}}>{s.label}</span>
+              </div>
+              <h3 style={{fontSize:17,fontWeight:600,marginBottom:12,letterSpacing:'-.01em',lineHeight:1.25}}>{s.title}</h3>
+              <ul style={{listStyle:'none',display:'flex',flexDirection:'column',gap:8,marginBottom:16,flex:1}}>
+                {s.lines.map((line)=>(
+                  <li key={line} style={{display:'flex',gap:8,alignItems:'flex-start'}}>
+                    <span style={{width:4,height:4,borderRadius:'50%',background:A,opacity:.65,marginTop:7,flexShrink:0}}/>
+                    <span style={{fontSize:13,color:'var(--t2)',lineHeight:1.55}}>{line}</span>
+                  </li>
+                ))}
+              </ul>
+              <div style={{background:'var(--bg2)',border:'1px solid var(--rule)',borderRadius:7,padding:'9px 12px',marginTop:'auto'}}>
+                <span className="mono" style={{fontSize:10.5,color:A,letterSpacing:'.02em'}}>{s.mono}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="sa-pipeline-split reveal" style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:18,marginTop:18,alignItems:'stretch'}}>
+          <div className="reveal d1" style={{...card}}>
+            <span className="mono" style={{fontSize:11,color:'var(--t3)',letterSpacing:'.07em',marginBottom:12}}>UI visualization</span>
+            <h3 style={{fontSize:17,fontWeight:600,marginBottom:10,letterSpacing:'-.01em',lineHeight:1.25}}>Real-time results on interface</h3>
+            <p style={{fontSize:13.5,color:'var(--t2)',lineHeight:1.7}}>
+              Tables, guidance, and status in the docked Structure Assistant panel stay in sync with Grasshopper as slabs, materials, and loads change — the same interaction model as elsewhere on this page.
+            </p>
           </div>
           <div className="reveal d2">
-            <div className="mono" style={{fontSize:10,fontWeight:700,letterSpacing:'.08em',textTransform:'uppercase',color:'var(--t3)',marginBottom:10}}>
-              Actual Grasshopper Script Recording
-            </div>
-            <div className="sa-pipeline-video-card">
-              <video controls poster="assets/grasshopper-video-poster.png">
-                <source src="assets/grasshopper-script-recording.mp4" type="video/mp4" />
-              </video>
+            <div className="mono" style={{fontSize:11,color:'var(--t3)',letterSpacing:'.08em',textTransform:'uppercase',marginBottom:10}}>Actual Grasshopper script recording</div>
+            <div className="rhino-panel-chrome" style={{width:'100%',overflow:'hidden'}}>
+              <div className="rhino-panel-chrome__titlebar">
+                <div className="rhino-panel-chrome__dots" aria-hidden>
+                  <span style={{background:'oklch(0.65 0.18 25)'}} />
+                  <span style={{background:'oklch(0.75 0.15 80)'}} />
+                  <span style={{background:'oklch(0.55 0.16 145)'}} />
+                </div>
+                <span className="mono" style={{fontSize:10,color:'var(--t3)',letterSpacing:'.06em',marginLeft:8}}>Grasshopper · definition capture</span>
+              </div>
+              <div style={{background:'#0a0c10',padding:10,lineHeight:0}}>
+                <video controls poster="assets/grasshopper-video-poster.png" style={{width:'100%',height:'auto',display:'block',borderRadius:8}}>
+                  <source src="assets/grasshopper-script-recording.mp4" type="video/mp4" />
+                </video>
+              </div>
             </div>
           </div>
         </div>
-        <div className="sa-pipeline-feature-bar reveal d3">
+        <div className="sa-pipeline-features-grid reveal d3" style={{marginTop:18}}>
           {features.map(([title,body])=>(
             <div key={title} className="sa-pipeline-feature-bar__item">
               <strong>{title}</strong>
@@ -580,7 +589,7 @@ function Ecosystem(){
   return (
     <section style={{padding:'88px 5vw',background:'var(--bg2)',borderTop:'1px solid var(--rule)'}}>
       <div style={{maxWidth:1100,margin:'0 auto'}}>
-        <SectionLabel n="09" title="Part of a larger system" sub="Structure Assistant is the first module in the Small Architecture Office Assistant platform — alongside sustainability, zoning, and code assistants."/>
+        <SectionLabel n="08" title="Part of a larger system" sub="Structure Assistant is the first module in the Small Architecture Office Assistant platform — alongside sustainability, zoning, and code assistants."/>
         <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:14,marginTop:44,maxWidth:720,marginLeft:'auto',marginRight:'auto'}}>
           {MODS.map((m,i)=>(
             <div key={i} className={`reveal d${Math.min(i+1,4)}`} style={{background:m.status==='live'?'white':'oklch(0.975 0.005 248)',border:m.status==='live'?`1.5px solid ${A}`:'1px solid var(--rule)',borderRadius:12,padding:'22px 20px',boxShadow:m.status==='live'?`0 4px 20px ${A}18`:'var(--shadow-sm)',opacity:m.status==='live'?1:0.65,display:'flex',alignItems:'center',justifyContent:'space-between'}}>
@@ -610,7 +619,7 @@ function Download(){
       <div style={{maxWidth:1100,margin:'0 auto'}}>
         <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:56,alignItems:'start'}}>
           <div>
-            <SectionLabel n="10" title="Plugin installation"/>
+            <SectionLabel n="09" title="Plugin installation"/>
             <p className="reveal" style={{fontSize:15,color:'var(--t2)',lineHeight:1.75,marginBottom:28,marginLeft:32}}>
               Download a single <span className="mono" style={{fontSize:13,color:A}}>.zip</span> that bundles the Rhino plug-in (<span className="mono" style={{fontSize:12.5,color:A}}>.rhp</span>) for the Structure Assistant panel, the <span className="mono" style={{fontSize:13,color:A}}>StructureAssistant.gh</span> Grasshopper definition, an optional sample Rhino model (<span className="mono" style={{fontSize:12.5,color:A}}>.3dm</span>), and a <span className="mono" style={{fontSize:12.5,color:A}}>README</span> install guide.
             </p>
@@ -752,7 +761,6 @@ function App(){
     <HowItWorks/>
     <BackendArchitecture/>
     <Demo/>
-    <Features/>
     <Credibility/>
     <SystemPipeline/>
     <Ecosystem/>
